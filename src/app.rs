@@ -2,6 +2,7 @@ use leptos::*;
 use leptos::html::Input;
 use leptos::html::Div;
 use std::sync::atomic::{AtomicUsize, Ordering};
+use wasm_bindgen::JsCast;
 
 static NEXT_ID: AtomicUsize = AtomicUsize::new(0);
 
@@ -500,12 +501,18 @@ fn Terminal() -> impl IntoView {
             process_command(cmd);
             
             // On mobile, blur the input to dismiss keyboard
-            let window_width = window().inner_width().ok().and_then(|w| w.as_f64()).unwrap_or(1024.0);
-            if window_width < 768.0 {
-                if let Some(input_el) = input_ref.get() {
-                    let _ = input_el.blur();
+            // Use timeout to ensure UI updates don't steal focus back
+            set_timeout(move || {
+                let window_width = window().inner_width().ok().and_then(|w| w.as_f64()).unwrap_or(1024.0);
+                if window_width < 768.0 {
+                    let input_el = window().document().unwrap().get_element_by_id("cmd-input");
+                    if let Some(el) = input_el {
+                        if let Some(html_el) = el.dyn_ref::<web_sys::HtmlElement>() {
+                            let _ = html_el.blur();
+                        }
+                    }
                 }
-            }
+            }, std::time::Duration::from_millis(10));
         }
     };
 
@@ -587,6 +594,7 @@ fn Terminal() -> impl IntoView {
                             <span class="prompt">"λ "</span>
                             <input
                                 type="text"
+                                id="cmd-input"
                                 class="terminal-input"
                                 placeholder="type a command..."
                                 node_ref=input_ref

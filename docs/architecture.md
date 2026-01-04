@@ -60,6 +60,7 @@ The terminal is **fully functional**, not decorative:
 The terminal genre is typically desktop-only. Vanguard optimizes for mobile with:
 - **Smart Scroll**: Automatically aligns the active command to the top of the viewport.
 - **Touch Actions**: Dedicated "Send" button (`➜`) for users without easy access to 'Enter'.
+- **Focus Management**: Aggressive `blur()` logic with async timeouts to dismiss virtual keyboards immediately after submission, preventing view obstruction.
 - **Typography Scaling**: Dynamic font sizing (`0.75rem`) and increased line height (`1.6`) for readability.
 
 ### Real-Time & Async Systems

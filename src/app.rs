@@ -384,7 +384,21 @@ fn Terminal() -> impl IntoView {
             "exit" | "quit" => vec![TerminalLine::text("", "  no escape. type 'help' :)", false)],
             "rm" | "rm -rf" | "rm -rf /" => vec![TerminalLine::text("", "  🛑 nice try.", false)],
             "rust" | "🦀" => vec![TerminalLine::text("", "  🦀 btw i use rust", false)],
-            "ping" => vec![TerminalLine::text("", "  pong. 0.42ms", false)],
+            "ping" => {
+                let set_history = set_history.clone();
+                spawn_local(async move {
+                    let start = js_sys::Date::now();
+                    // Fetch current page just to measure round trip to origin/cache
+                    let _ = gloo_net::http::Request::get("/").send().await;
+                    let end = js_sys::Date::now();
+                    let duration = end - start;
+                    
+                    set_history.update(|h| {
+                        h.push(TerminalLine::text("", &format!("  pong. {:.0}ms", duration), false));
+                    });
+                });
+                vec![TerminalLine::text("", "  pinging...", false)]
+            },
             "date" => vec![TerminalLine::text("", "  2026. building the future.", false)],
             "cat readme" | "cat readme.md" => vec![
                 TerminalLine::text("", "", false),

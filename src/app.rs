@@ -22,6 +22,7 @@ enum OutputPart {
     Bold(String),
     Section(String),
     Badge(String),
+    CmdName(String),
     Link { text: String, url: String },
 }
 
@@ -74,6 +75,19 @@ impl TerminalLine {
             id: NEXT_ID.fetch_add(1, Ordering::Relaxed),
             prefix: prefix.to_string(),
             parts,
+            is_command: false,
+            is_boot: false,
+        }
+    }
+
+    fn help_entry(indent: &str, cmd: &str, desc: &str) -> Self {
+        Self {
+            id: NEXT_ID.fetch_add(1, Ordering::Relaxed),
+            prefix: indent.to_string(),
+            parts: vec![
+                OutputPart::CmdName(cmd.to_string()),
+                OutputPart::Text(desc.to_string())
+            ],
             is_command: false,
             is_boot: false,
         }
@@ -239,17 +253,26 @@ fn Terminal() -> impl IntoView {
     // Track uptime
     let start_time = js_sys::Date::now();
 
-    // auto-scroll to bottom when history changes
+    // Auto-scroll logic
     create_effect(move |_| {
         let _ = history.get();
         if let Some(el) = terminal_body_ref.get() {
-            // small delay to let dom update
-            set_timeout(
-                move || {
+            set_timeout(move || {
+                let window_width = window().inner_width().ok().and_then(|w| w.as_f64()).unwrap_or(1024.0);
+                if window_width < 768.0 {
+                    // On mobile, try to scroll the last user command to the top
+                    let commands = document().get_elements_by_class_name("user-command");
+                    if commands.length() > 0 {
+                        let last_cmd = commands.item(commands.length() - 1).unwrap();
+                        last_cmd.scroll_into_view_with_bool(true); // true = align to top
+                    } else {
+                        let _ = el.set_scroll_top(el.scroll_height());
+                    }
+                } else {
+                    // On desktop, standard console behavior (scroll to bottom)
                     let _ = el.set_scroll_top(el.scroll_height());
-                },
-                std::time::Duration::from_millis(10),
-            );
+                }
+            }, std::time::Duration::from_millis(10));
         }
     });
 
@@ -298,11 +321,11 @@ fn Terminal() -> impl IntoView {
             "help" | "h" | "?" => vec![
                 TerminalLine::text("", "", false),
                 TerminalLine::text("", "  commands:", false),
-                TerminalLine::text("", "  projects   list all repos", false),
-                TerminalLine::text("", "  skills     tech stack", false),
-                TerminalLine::text("", "  about      who i am", false),
-                TerminalLine::text("", "  contact    get in touch", false),
-                TerminalLine::text("", "  clear      reset terminal", false),
+                TerminalLine::help_entry("", "  projects   ", "list all repos"),
+                TerminalLine::help_entry("", "  skills     ", "tech stack"),
+                TerminalLine::help_entry("", "  about      ", "who i am"),
+                TerminalLine::help_entry("", "  contact    ", "get in touch"),
+                TerminalLine::help_entry("", "  clear      ", "reset terminal"),
                 TerminalLine::text("", "", false),
                 TerminalLine::text("", "  (try: neofetch, whoami, ls, sudo hire me, ping, date, rm -rf /)", false),
                 TerminalLine::text("", "", false),
@@ -450,7 +473,7 @@ fn Terminal() -> impl IntoView {
                             key=|line| line.id
                             children=move |line| {
                                 view! {
-                                    <div class="terminal-line" class:boot-line=line.is_boot>
+                                    <div class="terminal-line" class:boot-line=line.is_boot class:user-command=line.is_command>
                                         {if !line.prefix.is_empty() {
                                             Some(view! { 
                                                 <span class=if line.is_command { "prompt" } else if line.is_boot { "boot-prefix" } else { "" }>
@@ -479,6 +502,11 @@ fn Terminal() -> impl IntoView {
                                                 }.into_view(),
                                                 OutputPart::Badge(text) => view! {
                                                     <span class="skill-badge">
+                                                        {text.clone()}
+                                                    </span>
+                                                }.into_view(),
+                                                OutputPart::CmdName(text) => view! {
+                                                    <span class="cmd-name">
                                                         {text.clone()}
                                                     </span>
                                                 }.into_view(),

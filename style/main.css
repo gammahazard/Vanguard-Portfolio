@@ -641,6 +641,11 @@ body {
         font-size: 0.75rem;
     }
 
+    .cmd-name {
+        font-weight: 800;
+        color: var(--gold);
+    }
+
     .send-btn {
         display: block;
     }

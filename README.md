@@ -30,6 +30,7 @@
 
 - **Fully Interactive Terminal** — Real command input with working commands
 - **Real-Time Network Ops** — Async `ping` latency and authentic `neofetch` system uptime
+- **Typo Tolerance** — Levenshtein distance algorithm for smart "did you mean?" suggestions
 - **Boot Sequence Animation** — Linux-style boot messages on page load
 - **Inline Portfolio Display** — Projects and skills shown inside terminal
 - **Responsive Design** — Mobile-first with touch optimizations (Smart Scroll, Send Button)

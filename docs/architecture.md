@@ -68,6 +68,9 @@ Unlike static terminal emulators, Vanguard executes real systems logic:
 - **Uptime**: Tracks session duration from generic `Date` initialization.
 - **ID Stability**: Uses `AtomicUsize` for generating stable reactive IDs in Leptos `For` loops.
 
+### Algorithmic Features
+- **Fuzzy Matching**: Implemented a custom, zero-dependency Levenshtein distance algorithm (`O(n*m)`) to provide helpful "did you mean" suggestions for typos (edit distance ≤ 2), prioritizing user experience without bloating the WASM bundle with external crates.
+
 ---
 
 ## 3. Component Architecture

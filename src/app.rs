@@ -498,6 +498,14 @@ fn Terminal() -> impl IntoView {
         let cmd = current_input.get();
         if !cmd.is_empty() {
             process_command(cmd);
+            
+            // On mobile, blur the input to dismiss keyboard
+            let window_width = window().inner_width().ok().and_then(|w| w.as_f64()).unwrap_or(1024.0);
+            if window_width < 768.0 {
+                if let Some(input_el) = input_ref.get() {
+                    let _ = input_el.blur();
+                }
+            }
         }
     };
 

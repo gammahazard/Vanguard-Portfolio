@@ -140,6 +140,32 @@ fn get_boot_sequence() -> Vec<(u64, TerminalLine)> {
 
 
 
+
+
+// Levenshtein distance for fuzzy matching
+fn levenshtein(a: &str, b: &str) -> usize {
+    let len_a = a.chars().count();
+    let len_b = b.chars().count();
+    if len_a == 0 { return len_b; }
+    if len_b == 0 { return len_a; }
+
+    let mut matrix = vec![vec![0; len_b + 1]; len_a + 1];
+
+    for i in 0..=len_a { matrix[i][0] = i; }
+    for j in 0..=len_b { matrix[0][j] = j; }
+
+    for (i, char_a) in a.chars().enumerate() {
+        for (j, char_b) in b.chars().enumerate() {
+            let cost = if char_a == char_b { 0 } else { 1 };
+            matrix[i + 1][j + 1] = std::cmp::min(
+                std::cmp::min(matrix[i][j + 1] + 1, matrix[i + 1][j] + 1),
+                matrix[i][j] + cost
+            );
+        }
+    }
+    matrix[len_a][len_b]
+}
+
 // projects - all repos organized by category
 fn get_projects_output() -> Vec<TerminalLine> {
     let divider = "  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -";
@@ -430,10 +456,36 @@ fn Terminal() -> impl IntoView {
                 TerminalLine::text("", "", false),
             ],
             "" => vec![],
-            _ => vec![
-                TerminalLine::text("", &format!("  command not found: {}", cmd), false),
-                TerminalLine::text("", "  type 'help' for commands", false),
-            ],
+            _ => {
+                let valid_commands = vec![
+                    "about", "clear", "contact", "help", "neofetch", 
+                    "projects", "skills", "whoami", "ls", "sudo", "date", "ping"
+                ];
+                
+                let mut closest_cmd = "";
+                let mut min_dist = usize::MAX;
+
+                for valid in valid_commands {
+                    let dist = levenshtein(&cmd_lower, valid);
+                    if dist < min_dist {
+                        min_dist = dist;
+                        closest_cmd = valid;
+                    }
+                }
+
+                if min_dist <= 2 {
+                    vec![
+                        TerminalLine::text("", &format!("  command not found: {}", cmd), false),
+                        TerminalLine::text("", &format!("  did you mean '{}'? (dist: {})", closest_cmd, min_dist), false),
+                        TerminalLine::text("", "  type 'help' for commands", false),
+                    ]
+                } else {
+                    vec![
+                        TerminalLine::text("", &format!("  command not found: {}", cmd), false),
+                        TerminalLine::text("", "  type 'help' for commands", false),
+                    ]
+                }
+            },
         };
 
         for line in responses {

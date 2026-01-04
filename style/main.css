@@ -195,6 +195,22 @@ body {
     color: var(--text-dim);
 }
 
+.send-btn {
+    display: none;
+    /* Hidden on desktop */
+    background: transparent;
+    border: none;
+    color: var(--green);
+    font-size: 1.2rem;
+    padding: 0 12px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.send-btn:active {
+    transform: scale(0.9);
+}
+
 .boot-line {
     opacity: 0;
     animation: fadeIn 0.1s ease forwards;
@@ -623,6 +639,10 @@ body {
     .terminal-line .output,
     .terminal-line .command {
         font-size: 0.75rem;
+    }
+
+    .send-btn {
+        display: block;
     }
 
     .project-grid {

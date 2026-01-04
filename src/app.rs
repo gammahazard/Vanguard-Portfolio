@@ -419,10 +419,16 @@ fn Terminal() -> impl IntoView {
         set_current_input.set(String::new());
     };
 
+    let handle_submit = move || {
+        let cmd = current_input.get();
+        if !cmd.is_empty() {
+            process_command(cmd);
+        }
+    };
+
     let on_keydown = move |ev: web_sys::KeyboardEvent| {
         if ev.key() == "Enter" {
-            let cmd = current_input.get();
-            process_command(cmd);
+            handle_submit();
         }
     };
 
@@ -503,6 +509,9 @@ fn Terminal() -> impl IntoView {
                                 prop:value=move || current_input.get()
                                 autofocus
                             />
+                            <button class="send-btn" on:click=move |_| handle_submit()>
+                                "➜"
+                            </button>
                             <span class="cursor-blink">"_"</span>
                         </div>
                     </Show>

@@ -16,11 +16,12 @@ pub fn App() -> impl IntoView {
     }
 }
 
-// output can be text or a clickable link
 #[derive(Clone, PartialEq, Debug)]
 enum OutputPart {
     Text(String),
     Bold(String),
+    Section(String),
+    Badge(String),
     Link { text: String, url: String },
 }
 
@@ -49,6 +50,30 @@ impl TerminalLine {
             id: NEXT_ID.fetch_add(1, Ordering::Relaxed),
             prefix: prefix.to_string(),
             parts: vec![OutputPart::Bold(content.to_string())],
+            is_command: false,
+            is_boot: false,
+        }
+    }
+
+    fn section(prefix: &str, content: &str) -> Self {
+        Self {
+            id: NEXT_ID.fetch_add(1, Ordering::Relaxed),
+            prefix: prefix.to_string(),
+            parts: vec![OutputPart::Section(content.to_string())],
+            is_command: false,
+            is_boot: false,
+        }
+    }
+
+    fn badges(prefix: &str, items: Vec<&str>) -> Self {
+        let parts = items.into_iter()
+            .map(|s| OutputPart::Badge(s.to_string()))
+            .collect();
+        
+        Self {
+            id: NEXT_ID.fetch_add(1, Ordering::Relaxed),
+            prefix: prefix.to_string(),
+            parts,
             is_command: false,
             is_boot: false,
         }
@@ -106,7 +131,7 @@ fn get_projects_output() -> Vec<TerminalLine> {
     let divider = "  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -";
     vec![
         TerminalLine::text("", "", false),
-        TerminalLine::text("", "  // FULL STACK", false),
+        TerminalLine::section("", "  // FULL STACK"),
         TerminalLine::text("", "  ═══════════════════════════════════════════════════════════", false),
         TerminalLine::text("", "", false),
         TerminalLine::bold("", "  Kennel Platform"),
@@ -121,7 +146,7 @@ fn get_projects_output() -> Vec<TerminalLine> {
         TerminalLine::with_link("", "     ", "GitHub", "https://github.com/gammahazard/CyberVerse-exchange", ""),
         TerminalLine::text("", "  ───────────────────────────────────────────────────────────", false),
         TerminalLine::text("", "", false),
-        TerminalLine::text("", "  // SYSTEMS ARCHITECTURE", false),
+        TerminalLine::section("", "  // SYSTEMS ARCHITECTURE"),
         TerminalLine::text("", "  ═══════════════════════════════════════════════════════════", false),
         TerminalLine::text("", "", false),
         TerminalLine::bold("", "  Pacifica Engine"),
@@ -135,7 +160,7 @@ fn get_projects_output() -> Vec<TerminalLine> {
         TerminalLine::with_link("", "     ", "GitHub", "https://github.com/gammahazard/ore-app-mac", ""),
         TerminalLine::text("", "  ───────────────────────────────────────────────────────────", false),
         TerminalLine::text("", "", false),
-        TerminalLine::text("", "  // WASM & TOOLS", false),
+        TerminalLine::section("", "  // WASM & TOOLS"),
         TerminalLine::text("", "  ═══════════════════════════════════════════════════════════", false),
         TerminalLine::text("", "", false),
         TerminalLine::bold("", "  PokeFrame"),
@@ -174,21 +199,21 @@ fn get_projects_output() -> Vec<TerminalLine> {
 fn get_skills_output() -> Vec<TerminalLine> {
     vec![
         TerminalLine::text("", "", false),
-        TerminalLine::text("", "  // CORE SYSTEMS", false),
-        TerminalLine::text("", "  [ Rust ] [ C++ ] [ C ] [ WASM/WASI ] [ Emscripten ]", false),
-        TerminalLine::text("", "  [ Distributed Systems ] [ Microservices ]", false),
+        TerminalLine::section("", "  // CORE SYSTEMS"),
+        TerminalLine::badges("  ", vec!["Rust", "C++", "C", "WASM/WASI", "Emscripten"]),
+        TerminalLine::badges("  ", vec!["Distributed Systems", "Microservices"]),
         TerminalLine::text("", "", false),
-        TerminalLine::text("", "  // FULL STACK", false),
-        TerminalLine::text("", "  [ TypeScript ] [ Next.js 14+ ] [ React ] [ Node.js ]", false),
-        TerminalLine::text("", "  [ Tailwind CSS ] [ GraphQL ] [ gRPC ]", false),
+        TerminalLine::section("", "  // FULL STACK"),
+        TerminalLine::badges("  ", vec!["TypeScript", "Next.js 14+", "React", "Node.js"]),
+        TerminalLine::badges("  ", vec!["Tailwind CSS", "GraphQL", "gRPC"]),
         TerminalLine::text("", "", false),
-        TerminalLine::text("", "  // INFRASTRUCTURE & DATA", false),
-        TerminalLine::text("", "  [ Docker ] [ AWS ] [ PostgreSQL ] [ MongoDB ]", false),
-        TerminalLine::text("", "  [ Redis ] [ Supabase ] [ CI/CD ]", false),
+        TerminalLine::section("", "  // INFRASTRUCTURE & DATA"),
+        TerminalLine::badges("  ", vec!["Docker", "AWS", "PostgreSQL", "MongoDB"]),
+        TerminalLine::badges("  ", vec!["Redis", "Supabase", "CI/CD"]),
         TerminalLine::text("", "", false),
-        TerminalLine::text("", "  // SECURITY & WEB3", false),
-        TerminalLine::text("", "  [ FIDO2/WebAuthn ] [ OAuth 2.0 ] [ JWT ]", false),
-        TerminalLine::text("", "  [ Cloud Identity ] [ WebSockets ]", false),
+        TerminalLine::section("", "  // SECURITY & WEB3"),
+        TerminalLine::badges("  ", vec!["FIDO2/WebAuthn", "OAuth 2.0", "JWT"]),
+        TerminalLine::badges("  ", vec!["Cloud Identity", "WebSockets"]),
         TerminalLine::text("", "", false),
     ]
 }
@@ -413,6 +438,16 @@ fn Terminal() -> impl IntoView {
                                                 }.into_view(),
                                                 OutputPart::Bold(text) => view! {
                                                     <span class="output bold">
+                                                        {text.clone()}
+                                                    </span>
+                                                }.into_view(),
+                                                OutputPart::Section(text) => view! {
+                                                    <span class="output section-title">
+                                                        {text.clone()}
+                                                    </span>
+                                                }.into_view(),
+                                                OutputPart::Badge(text) => view! {
+                                                    <span class="skill-badge">
                                                         {text.clone()}
                                                     </span>
                                                 }.into_view(),

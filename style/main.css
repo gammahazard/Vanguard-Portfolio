@@ -151,6 +151,27 @@ body {
     /* Make it brighter than standard secondary text */
 }
 
+.terminal-line .output.section-title {
+    font-weight: 800;
+    color: var(--gold);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    display: block;
+    margin-top: 12px;
+}
+
+.skill-badge {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-primary);
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-right: 6px;
+    margin-bottom: 6px;
+    display: inline-block;
+    font-size: 0.8rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
 .terminal-input-line {
     display: flex;
     align-items: center;

@@ -235,6 +235,9 @@ fn Terminal() -> impl IntoView {
     let (show_input, set_show_input) = create_signal(false);
     let input_ref = create_node_ref::<Input>();
     let terminal_body_ref = create_node_ref::<Div>();
+    
+    // Track uptime
+    let start_time = js_sys::Date::now();
 
     // auto-scroll to bottom when history changes
     create_effect(move |_| {
@@ -307,7 +310,7 @@ fn Terminal() -> impl IntoView {
             "projects" | "ls projects" | "repos" => get_projects_output(),
             "skills" | "stack" | "tech" => get_skills_output(),
             "contact" | "email" => get_contact_output(),
-            "about" | "whoami" => vec![
+            "about" => vec![
                 TerminalLine::text("", "", false),
                 TerminalLine::text("", "  CM Mongo", false),
                 TerminalLine::text("", "  Principal Systems Architect", false),
@@ -345,15 +348,23 @@ fn Terminal() -> impl IntoView {
                 TerminalLine::text("", "  -rw-r--r--  .env [redacted]", false),
                 TerminalLine::text("", "", false),
             ],
-            "neofetch" => vec![
-                TerminalLine::text("", "", false),
-                TerminalLine::text("", "        /\\         cm_mongo@vanguard", false),
-                TerminalLine::text("", "       /  \\        os: vanguardos 2.0", false),
-                TerminalLine::text("", "      / 🦀 \\       kernel: rust + wasm", false),
-                TerminalLine::text("", "     /______\\      shell: leptos", false),
-                TerminalLine::text("", "                   uptime: 1337 days", false),
-                TerminalLine::text("", "", false),
-            ],
+            "neofetch" => {
+                let now = js_sys::Date::now();
+                let uptime_ms = now - start_time;
+                let minutes = (uptime_ms / 60000.0).floor();
+                let seconds = ((uptime_ms % 60000.0) / 1000.0).floor();
+                
+                vec![
+                    TerminalLine::text("", "", false),
+                    TerminalLine::text("", "        /\\         cm_mongo@vanguard", false),
+                    TerminalLine::text("", "       /  \\        os: vanguardos 2.0", false),
+                    TerminalLine::text("", "      / 🦀 \\       kernel: rust + wasm", false),
+                    TerminalLine::text("", "     /______\\      shell: leptos", false),
+                    TerminalLine::text("", &format!("                   uptime: {}m {}s", minutes, seconds), false),
+                    TerminalLine::text("", "", false),
+                ]
+            },
+            "whoami" => vec![TerminalLine::text("", "  vanguard", false)],
             "pwd" => vec![TerminalLine::text("", "  /home/vanguard/portfolio", false)],
             "uptime" => vec![TerminalLine::text("", "  up 1337 days, building systems", false)],
             "sudo hire me" | "hire" => vec![

@@ -335,7 +335,7 @@ fn Terminal() -> impl IntoView {
             ],
             "sudo" => vec![TerminalLine::text("", "  try: sudo hire me", false)],
             "exit" | "quit" => vec![TerminalLine::text("", "  no escape. type 'help' :)", false)],
-            "rm -rf /" => vec![TerminalLine::text("", "  🛑 nice try.", false)],
+            "rm" | "rm -rf" | "rm -rf /" => vec![TerminalLine::text("", "  🛑 nice try.", false)],
             "rust" | "🦀" => vec![TerminalLine::text("", "  🦀 btw i use rust", false)],
             "ping" => vec![TerminalLine::text("", "  pong. 0.42ms", false)],
             "date" => vec![TerminalLine::text("", "  2026. building the future.", false)],

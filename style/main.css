@@ -615,8 +615,14 @@ body {
     }
 
     .terminal-line {
-        margin-bottom: 12px;
+        margin-bottom: 16px;
         line-height: 1.6;
+        font-size: 0.75rem;
+    }
+
+    .terminal-line .output,
+    .terminal-line .command {
+        font-size: 0.75rem;
     }
 
     .project-grid {

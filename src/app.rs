@@ -81,7 +81,8 @@ fn get_boot_sequence() -> Vec<(u64, TerminalLine)> {
         (2700, TerminalLine::text("", "  skills     Inspect technical stack and capabilities", false)),
         (2800, TerminalLine::text("", "  about      Professional profile and biography", false)),
         (2900, TerminalLine::text("", "  contact    Display contact information", false)),
-        (3000, TerminalLine::text("", "", false)),
+        (3000, TerminalLine::text("", "  help       List all commands and secrets", false)),
+        (3100, TerminalLine::text("", "", false)),
         (3100, TerminalLine::text("", "  Type a command to begin...", false)),
         (3200, TerminalLine::text("", "", false)),
     ]
@@ -264,7 +265,7 @@ fn Terminal() -> impl IntoView {
                 TerminalLine::text("", "  contact    get in touch", false),
                 TerminalLine::text("", "  clear      reset terminal", false),
                 TerminalLine::text("", "", false),
-                TerminalLine::text("", "  (try: neofetch, whoami, ls, sudo hire me)", false),
+                TerminalLine::text("", "  (try: neofetch, whoami, ls, sudo hire me, ping, date, rm -rf /)", false),
                 TerminalLine::text("", "", false),
             ],
             "projects" | "ls projects" | "repos" => get_projects_output(),

@@ -10,7 +10,7 @@
 
 ## 🚀 Live Demo
 
-[**vanguard-landing.pages.dev**](#) *(Coming Soon)*
+[**gammahazard.github.io/Vanguard-Portfolio**](https://gammahazard.github.io/Vanguard-Portfolio/)
 
 ---
 

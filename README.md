@@ -133,7 +133,7 @@ Project {
 
 ## 📄 License
 
-MIT © 2026 CM Mongo (Navraj Dhaliwal)
+MIT © 2026 CM Mongo
 
 ---
 

@@ -614,6 +614,11 @@ body {
         padding: 16px;
     }
 
+    .terminal-line {
+        margin-bottom: 12px;
+        line-height: 1.6;
+    }
+
     .project-grid {
         grid-template-columns: 1fr;
     }

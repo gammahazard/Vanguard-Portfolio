@@ -56,6 +56,18 @@ The terminal is **fully functional**, not decorative:
 - **Headers/Body**: Inter (Google Fonts)
 - **Terminal/Code**: SF Mono, Fira Code, Consolas (system stack)
 
+### Mobile First Adaptations
+The terminal genre is typically desktop-only. Vanguard optimizes for mobile with:
+- **Smart Scroll**: Automatically aligns the active command to the top of the viewport.
+- **Touch Actions**: Dedicated "Send" button (`➜`) for users without easy access to 'Enter'.
+- **Typography Scaling**: Dynamic font sizing (`0.75rem`) and increased line height (`1.6`) for readability.
+
+### Real-Time & Async Systems
+Unlike static terminal emulators, Vanguard executes real systems logic:
+- **Ping**: Async `spawn_local` task using `gloo_net` to fetch origin and measure `window.performance` delta.
+- **Uptime**: Tracks session duration from generic `Date` initialization.
+- **ID Stability**: Uses `AtomicUsize` for generating stable reactive IDs in Leptos `For` loops.
+
 ---
 
 ## 3. Component Architecture
@@ -163,9 +175,9 @@ codegen-units = 1  # Single codegen unit for better optimization
 | `main.rs` | ~10 | Entry point, mounts App |
 | `app.rs` | ~210 | All components |
 | `lib.rs` | ~1 | Module exports |
-| `main.css` | ~350 | All styling |
+| `main.css` | ~650 | All styling (Mobile responsive) |
 | `index.html` | ~15 | HTML shell with Trunk hooks |
-| `Cargo.toml` | ~15 | Dependencies |
+| `Cargo.toml` | ~20 | Deps: `leptos`, `web-sys`, `js-sys`, `gloo-net` |
 | `Trunk.toml` | ~10 | Build config |
 
 ---

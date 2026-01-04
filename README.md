@@ -29,11 +29,11 @@
 ## ✨ Features
 
 - **Fully Interactive Terminal** — Real command input with working commands
+- **Real-Time Network Ops** — Async `ping` latency and authentic `neofetch` system uptime
 - **Boot Sequence Animation** — Linux-style boot messages on page load
 - **Inline Portfolio Display** — Projects and skills shown inside terminal
-- **20+ Built-in Commands** — Navigation, info, and Easter eggs
+- **Responsive Design** — Mobile-first with touch optimizations (Smart Scroll, Send Button)
 - **Zero JavaScript** — 100% Rust compiled to WebAssembly
-- **Responsive Design** — Mobile-first with graceful fallbacks
 
 ### Terminal Commands
 
@@ -55,8 +55,8 @@
 | `whoami` | Who am I? |
 | `sudo hire me` | 🎉 The magic words |
 | `cat readme.md` | Read the readme |
-| `ping` | Test latency |
-| `uptime` | System uptime |
+| `ping` | real-time network latency (ms) |
+| `uptime` | actual session duration |
 
 ---
 

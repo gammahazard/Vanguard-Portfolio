@@ -126,19 +126,21 @@ body {
 
 .terminal-line {
     margin-bottom: 4px;
-    display: flex;
-    align-items: flex-start;
     line-height: 1.5;
+    /* Use standard flow instead of flex to ensure text wraps correctly */
+    display: block;
 }
 
 .terminal-line .output {
     color: var(--text-secondary);
     white-space: pre-wrap;
     font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    display: inline;
 }
 
 .terminal-line .command {
     color: var(--green);
+    display: inline;
 }
 
 .terminal-input-line {

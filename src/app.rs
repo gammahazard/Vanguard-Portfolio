@@ -68,8 +68,16 @@ fn get_boot_sequence() -> Vec<(u64, TerminalLine)> {
         (1700, TerminalLine::text("", "  vanguard secure solutions", false)),
         (1800, TerminalLine::text("", "  full stack systems architecture", false)),
         (2000, TerminalLine::text("", "", false)),
-        (2300, TerminalLine::text("[ok]", " system ready. type 'help' for commands.", true)),
-        (2500, TerminalLine::text("", "", false)),
+        (2300, TerminalLine::text("[ok]", " system ready.", true)),
+        (2400, TerminalLine::text("", "", false)),
+        (2500, TerminalLine::text("", "  commands:", false)),
+        (2600, TerminalLine::text("", "  projects   list all repos", false)),
+        (2700, TerminalLine::text("", "  skills     tech stack", false)),
+        (2800, TerminalLine::text("", "  about      who i am", false)),
+        (2900, TerminalLine::text("", "  contact    get in touch", false)),
+        (3000, TerminalLine::text("", "", false)),
+        (3100, TerminalLine::text("", "  type a command to begin...", false)),
+        (3200, TerminalLine::text("", "", false)),
     ]
 }
 
@@ -98,7 +106,7 @@ fn get_projects_output() -> Vec<TerminalLine> {
         TerminalLine::text("", "  └─ macos daemon: process health + auto-restart", false),
         TerminalLine::with_link("", "     ", "github", "https://github.com/gammahazard/ore-app-mac", ""),
         TerminalLine::text("", "", false),
-        TerminalLine::text("", "  // wasm", false),
+        TerminalLine::text("", "  // wasm & tools", false),
         TerminalLine::text("", "", false),
         TerminalLine::text("", "  pokeframe", false),
         TerminalLine::text("", "  └─ rust gameboy emulator → wasm, 60fps", false),
@@ -112,6 +120,14 @@ fn get_projects_output() -> Vec<TerminalLine> {
         TerminalLine::text("", "  emscripten demos", false),
         TerminalLine::text("", "  └─ c++ → wasm including doom engine", false),
         TerminalLine::with_link("", "     ", "github", "https://github.com/gammahazard/Emscripten-portfolio", ""),
+        TerminalLine::text("", "", false),
+        TerminalLine::text("", "  binary visualizer", false),
+        TerminalLine::text("", "  └─ visual tool for binary data structures", false),
+        TerminalLine::with_link("", "     ", "github", "https://github.com/gammahazard/binary-visualizer", ""),
+        TerminalLine::text("", "", false),
+        TerminalLine::text("", "  wasm calculator", false),
+        TerminalLine::text("", "  └─ rust → wasm compilation demo", false),
+        TerminalLine::with_link("", "     ", "github", "https://github.com/gammahazard/wasm-calculator", ""),
         TerminalLine::text("", "", false),
     ]
 }

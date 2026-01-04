@@ -20,6 +20,7 @@ pub fn App() -> impl IntoView {
 #[derive(Clone, PartialEq, Debug)]
 enum OutputPart {
     Text(String),
+    Bold(String),
     Link { text: String, url: String },
 }
 
@@ -40,6 +41,16 @@ impl TerminalLine {
             parts: vec![OutputPart::Text(content.to_string())],
             is_command: false,
             is_boot,
+        }
+    }
+
+    fn bold(prefix: &str, content: &str) -> Self {
+        Self {
+            id: NEXT_ID.fetch_add(1, Ordering::Relaxed),
+            prefix: prefix.to_string(),
+            parts: vec![OutputPart::Bold(content.to_string())],
+            is_command: false,
+            is_boot: false,
         }
     }
     
@@ -98,14 +109,14 @@ fn get_projects_output() -> Vec<TerminalLine> {
         TerminalLine::text("", "  // FULL STACK", false),
         TerminalLine::text("", "  ═══════════════════════════════════════════════════════════", false),
         TerminalLine::text("", "", false),
-        TerminalLine::text("", "  Kennel Platform", false),
+        TerminalLine::bold("", "  Kennel Platform"),
         TerminalLine::text("", "  └─ Flagship ERP: FIDO2 auth, RBAC, 61 endpoints", false),
         TerminalLine::with_link("", "     ", "GitHub", "https://github.com/gammahazard/Vanguard-kennel-frontend", ""),
         TerminalLine::with_link("", " | ", "Demo", "https://vanguard-frontend.vercel.app", ""),
         TerminalLine::text("", "", false),
         TerminalLine::text("", divider, false),
         TerminalLine::text("", "", false),
-        TerminalLine::text("", "  CyberVerse Exchange", false),
+        TerminalLine::bold("", "  CyberVerse Exchange"),
         TerminalLine::text("", "  └─ Multi-chain bridge: SOL/ADA/ETH/ERGO wallets", false),
         TerminalLine::with_link("", "     ", "GitHub", "https://github.com/gammahazard/CyberVerse-exchange", ""),
         TerminalLine::text("", "  ───────────────────────────────────────────────────────────", false),
@@ -113,13 +124,13 @@ fn get_projects_output() -> Vec<TerminalLine> {
         TerminalLine::text("", "  // SYSTEMS ARCHITECTURE", false),
         TerminalLine::text("", "  ═══════════════════════════════════════════════════════════", false),
         TerminalLine::text("", "", false),
-        TerminalLine::text("", "  Pacifica Engine", false),
+        TerminalLine::bold("", "  Pacifica Engine"),
         TerminalLine::text("", "  └─ HFT Bot: Sub-ms execution, 5-factor signals", false),
         TerminalLine::with_link("", "     ", "GitHub", "https://github.com/gammahazard/auto-trade", ""),
         TerminalLine::text("", "", false),
         TerminalLine::text("", divider, false),
         TerminalLine::text("", "", false),
-        TerminalLine::text("", "  Ore Supervisor", false),
+        TerminalLine::bold("", "  Ore Supervisor"),
         TerminalLine::text("", "  └─ macOS Daemon: Process health + auto-restart", false),
         TerminalLine::with_link("", "     ", "GitHub", "https://github.com/gammahazard/ore-app-mac", ""),
         TerminalLine::text("", "  ───────────────────────────────────────────────────────────", false),
@@ -127,32 +138,32 @@ fn get_projects_output() -> Vec<TerminalLine> {
         TerminalLine::text("", "  // WASM & TOOLS", false),
         TerminalLine::text("", "  ═══════════════════════════════════════════════════════════", false),
         TerminalLine::text("", "", false),
-        TerminalLine::text("", "  PokeFrame", false),
+        TerminalLine::bold("", "  PokeFrame"),
         TerminalLine::text("", "  └─ Rust GameBoy emulator → WASM, 60fps", false),
         TerminalLine::with_link("", "     ", "GitHub", "https://github.com/gammahazard/PokeFramePublic", ""),
         TerminalLine::text("", "", false),
         TerminalLine::text("", divider, false),
         TerminalLine::text("", "", false),
-        TerminalLine::text("", "  Fleet-SDK Builder", false),
+        TerminalLine::bold("", "  Fleet-SDK Builder"),
         TerminalLine::text("", "  └─ Ergo transaction builder: EIP-12 compliant", false),
         TerminalLine::with_link("", "     ", "GitHub", "https://github.com/gammahazard/Fleet-SDK-cc", ""),
         TerminalLine::with_link("", " | ", "Demo", "https://gammahazard.github.io/Fleet-SDK-cc/dist/index.html", ""),
         TerminalLine::text("", "", false),
         TerminalLine::text("", divider, false),
         TerminalLine::text("", "", false),
-        TerminalLine::text("", "  Emscripten Demos", false),
+        TerminalLine::bold("", "  Emscripten Demos"),
         TerminalLine::text("", "  └─ C++ → WASM including Doom engine", false),
         TerminalLine::with_link("", "     ", "GitHub", "https://github.com/gammahazard/Emscripten-portfolio", ""),
         TerminalLine::text("", "", false),
         TerminalLine::text("", divider, false),
         TerminalLine::text("", "", false),
-        TerminalLine::text("", "  Binary Visualizer", false),
+        TerminalLine::bold("", "  Binary Visualizer"),
         TerminalLine::text("", "  └─ Visual tool for binary data structures", false),
         TerminalLine::with_link("", "     ", "GitHub", "https://github.com/gammahazard/binary-visualizer", ""),
         TerminalLine::text("", "", false),
         TerminalLine::text("", divider, false),
         TerminalLine::text("", "", false),
-        TerminalLine::text("", "  WASM Calculator", false),
+        TerminalLine::bold("", "  WASM Calculator"),
         TerminalLine::text("", "  └─ Rust → WASM compilation demo", false),
         TerminalLine::with_link("", "     ", "GitHub", "https://github.com/gammahazard/wasm-calculator", ""),
         TerminalLine::text("", "", false),
@@ -397,6 +408,11 @@ fn Terminal() -> impl IntoView {
                                             match part {
                                                 OutputPart::Text(text) => view! {
                                                     <span class=if line.is_command { "command" } else { "output" }>
+                                                        {text.clone()}
+                                                    </span>
+                                                }.into_view(),
+                                                OutputPart::Bold(text) => view! {
+                                                    <span class="output bold">
                                                         {text.clone()}
                                                     </span>
                                                 }.into_view(),

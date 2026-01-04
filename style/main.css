@@ -145,6 +145,12 @@ body {
     display: inline;
 }
 
+.terminal-line .output.bold {
+    font-weight: 700;
+    color: #fff;
+    /* Make it brighter than standard secondary text */
+}
+
 .terminal-input-line {
     display: flex;
     align-items: center;

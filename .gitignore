@@ -1,0 +1,22 @@
+# build output
+/dist
+/target
+
+# dependencies
+/node_modules
+
+# environment
+.env
+.env.local
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# trunk cache
+.trunk/

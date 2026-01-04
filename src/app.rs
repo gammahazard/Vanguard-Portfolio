@@ -1,6 +1,9 @@
 use leptos::*;
 use leptos::html::Input;
 use leptos::html::Div;
+use std::sync::atomic::{AtomicUsize, Ordering};
+
+static NEXT_ID: AtomicUsize = AtomicUsize::new(0);
 
 // main app component - keeps it simple
 #[component]
@@ -22,6 +25,7 @@ enum OutputPart {
 
 #[derive(Clone, PartialEq)]
 struct TerminalLine {
+    id: usize,
     prefix: String,
     parts: Vec<OutputPart>,
     is_command: bool,
@@ -31,6 +35,7 @@ struct TerminalLine {
 impl TerminalLine {
     fn text(prefix: &str, content: &str, is_boot: bool) -> Self {
         Self {
+            id: NEXT_ID.fetch_add(1, Ordering::Relaxed),
             prefix: prefix.to_string(),
             parts: vec![OutputPart::Text(content.to_string())],
             is_command: false,
@@ -48,6 +53,7 @@ impl TerminalLine {
             parts.push(OutputPart::Text(text_after.to_string()));
         }
         Self {
+            id: NEXT_ID.fetch_add(1, Ordering::Relaxed),
             prefix: prefix.to_string(),
             parts,
             is_command: false,
@@ -80,6 +86,8 @@ fn get_boot_sequence() -> Vec<(u64, TerminalLine)> {
         (3200, TerminalLine::text("", "", false)),
     ]
 }
+
+
 
 // projects - all repos organized by category
 fn get_projects_output() -> Vec<TerminalLine> {
@@ -225,6 +233,7 @@ fn Terminal() -> impl IntoView {
         // add command to history
         set_history.update(|h| {
             h.push(TerminalLine { 
+                id: NEXT_ID.fetch_add(1, Ordering::Relaxed),
                 prefix: "λ".to_string(), 
                 parts: vec![OutputPart::Text(format!(" {}", cmd))],
                 is_command: true,
@@ -347,7 +356,7 @@ fn Terminal() -> impl IntoView {
                     <div class="terminal-history">
                         <For
                             each=move || history.get()
-                            key=|line| format!("{:?}", line.parts)
+                            key=|line| line.id
                             children=move |line| {
                                 view! {
                                     <div class="terminal-line" class:boot-line=line.is_boot>

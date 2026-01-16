@@ -1,10 +1,10 @@
-# Vanguard Secure Solutions - Landing Page
+# CM Mongo | Portfolio
 
 ![Built With](https://img.shields.io/badge/Built_With-Rust_→_WASM-orange?style=for-the-badge&logo=rust)
 ![Framework](https://img.shields.io/badge/Framework-Leptos_0.6-blue?style=for-the-badge)
 ![Deploy](https://img.shields.io/badge/Deploy-GitHub_Pages-black?style=for-the-badge)
 
-> **Engineering Trust** — Portfolio landing page for Vanguard Secure Solutions, built entirely in Rust compiled to WebAssembly.
+> **Independent Systems Engineer** — Interactive terminal portfolio showcasing Edge Computing & WASI 0.2 expertise, built entirely in Rust compiled to WebAssembly.
 
 ---
 
@@ -40,8 +40,8 @@
 
 | Command | Action |
 |---------|--------|
-| `projects` | List all 7 portfolio projects |
-| `skills` | View categorized tech stack |
+| `projects` | List industrial edge & systems projects |
+| `skills` | View technical stack (WASI 0.2, Rust, IEC 62443) |
 | `about` | About CM Mongo |
 | `contact` | Get in touch |
 | `help` | Show command list |
@@ -137,4 +137,4 @@ MIT © 2026 CM Mongo
 
 ---
 
-*Powered by Vanguard Secure Solutions — Engineering Trust.*
+*Portfolio built with Rust & WebAssembly by CM Mongo*

@@ -250,6 +250,7 @@ fn get_projects_output() -> Vec<TerminalLine> {
         TerminalLine::text("", "  └─ Capability-based security: WASI 0.2 data diode for ICS", false),
         TerminalLine::text("", "     14.7KB WASM vs 500MB+ Docker • 17 security tests", false),
         TerminalLine::with_link("", "     ", "Live Demo", "https://vanguard-ics-guardian.vercel.app", ""),
+        TerminalLine::with_link("", " | ", "GitHub", "https://github.com/gammahazard/vanguard-ics-guardian", ""),
         TerminalLine::text("", "", false),
         TerminalLine::text("", divider, false),
         TerminalLine::text("", "", false),
